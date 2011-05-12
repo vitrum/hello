@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+
+<title>moblie test</title>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" ></script>
+
+<style>
+html, body { margin: 0;   padding: 0;}
+.droginfo { width:100%; height:40px; background:#ffc;line-height:18px}
+.droginfo div {width:100px; float:left;}
+.drogbox {background: #333377;    clear: left;    min-height: 240px;    min-width: 320px; max-width:480px;    position: relative;  overflow:hidden;  }
+#moveBox {width:3200px; height:200px; position:absolute; left:0; top:20px; background:  #ddd; padding: 0;}
+#moveBox .photo { width:150px; height:180px;  padding: 10px 5px; float:left;  }
+</style>
+
+</head>
+
+<body>
+
+<div class="drogbox">
+    <div id="moveBox">
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00007.jpg" />
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00006.jpg" />
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00005.jpg" />
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00004.jpg" />
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00003.jpg" />
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00002.jpg" />
+      <img class="photo" src="http://media2.glamour-sales.com.cn/media/catalog/product/yv/s/YR0-518-00001.jpg" />
+    </div>
+</div>
+
+<div class="droginfo">
+<div>-webkit-transition:<span  id="transition" >-webkit-transition</span></div>
+  <div>pageX:<span  id="movex" ></span></div>
+  <div>pageY:<span  id="movey" ></span></div>
+  <div>changeX:<span  id="changex" ></span></div>
+  <div>autofix:<span  id="moveend" ></span></div>
+</div>
+<script type="text/javascript">
+
+var changeXOld = 0;
+var changeXNew = 0;
+var firstTouchX = 0;
+var moveThing =  jQuery('#moveBox');
+var moveList = jQuery('#moveBox img').length;
+
+jQuery('#moveBox').width( moveList  * 160);
+
+jQuery('.drogbox').bind('touchstart',function(e){
+     
+      var moveBoxoffset = moveThing.offset();
+      e.preventDefault();
+      var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+
+      changeXOld = moveBoxoffset .left;
+      firstTouchX = touch.pageX;
+
+}).bind('touchmove',function(e){
+    
+      e.preventDefault();
+      var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+      var elm = jQuery(this).offset();
+      var x = touch.pageX - elm.left;
+      var y = touch.pageY - elm.top;
+              var seconds = new Date().getSeconds();
+              var sdegree = seconds * 6;
+              var srotate = "rotate(" + sdegree + "deg)";
+      if(x < jQuery(this).width() && x > 0){
+           if(y < jQuery(this).height() && y > 0){
+                  //CODE GOES HERE
+                  //console.log(touch.pageY+' '+touch.pageX);
+                      jQuery('#movex').text(touch.pageX);
+                      jQuery('#movey').text(touch.pageY);
+                      jQuery('#changex').text(changeXOld + "," + changeXNew );
+                      jQuery('#moveend').text('');
+                      jQuery('.drogbox').css({"-moz-transform" : srotate, "-webkit-transform" : srotate});
+           }
+      }
+     
+
+      var newXpoint = (changeXOld - ( firstTouchX  - touch.pageX)) + 'px';
+      jQuery('#moveBox').css("left",newXpoint);
+
+}).bind('touchend',function(e){
+      e.preventDefault();
+      var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+      var moveBoxoffset = moveThing.offset();
+      var maxLeft = moveThing.width();
+
+      changeXNew = moveBoxoffset .left;
+      
+      jQuery('#changex').text(changeXOld + "," + changeXNew);
+
+      var jumpX = jQuery('.drogbox').width();
+      var drogChange = changeXNew - changeXOld ;
+     
+      if ( drogChange  > 10  )  { 
+         var newXpoint = ( (parseInt(moveBoxoffset.left / jumpX )) * jumpX )  + 'px';
+         jQuery('#moveBox').animate({left: newXpoint }, 180);
+         jQuery('#moveend').text('>10 +++');
+      }
+     if ( drogChange  < -10  )  { 
+         var newXpoint = ( (parseInt(moveBoxoffset.left / jumpX )) * jumpX - jumpX) ;
+        if ( (newXpoint* -1) >= (maxLeft - jumpX) ){
+             newXpoint = (maxLeft * -1) + jumpX + 'px';
+         }else {     newXpoint = newXpoint  + 'px';     }
+
+         jQuery('#moveBox').animate({left:newXpoint }, 180);
+         jQuery('#moveend').text('<-10 ---');
+      }
+     if ( drogChange  >= -10 && drogChange  <= 10  ){
+        var newXpoint = changeXOld + 'px';
+        jQuery('#moveBox').animate({left:newXpoint }, 50);
+     }
+});
+
+
+</script>
+</body>
+</html>
