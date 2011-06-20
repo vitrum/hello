@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link type="text/css" rel="stylesheet" href="http://js.wcdn.cn/t3/style/css/common/card.css" />
+</head>
+
+<body>
+
+
+<script type="text/javascript" src="http://js.wcdn.cn/t3/platform/js/api/wb.js"></script>
+<script type="text/javascript">
+WB.core.load(['connect', 'client', 'widget.base', 'widget.atWhere'], function() {
+	var cfg = {
+		key: '720033393',
+			xdpath: 'http://jssdk.sinaapp.com/_html/xd.html'
+	};
+	WB.connect.init(cfg);
+	WB.client.init(cfg);
+
+	var $E = function(s){
+		return document.getElementById(s);		
+	};
+	WB.widget.atWhere.searchAndAt($E("blog_at"));
+	
+	WB.widget.atWhere.blogAt($E("csdd"));
+	WB.widget.atWhere.blogAt($E("search"), "a");
+	
+	
+});
+</script>
+
+</body>
+</html>
